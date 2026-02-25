@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html,
+  body,
+  #root {
+    @apply w-full min-h-screen m-0 p-0;
+  }
+
+  body {
+    @apply bg-dark-bg text-white font-sans;
+    overflow-x: hidden;
+    letter-spacing: -0.01em;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-tight;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-dark-card/60 backdrop-blur-xl border border-dark-border/40 rounded-2xl shadow-glass;
+    background: linear-gradient(135deg, rgba(19, 19, 43, 0.7) 0%, rgba(17, 17, 34, 0.5) 100%);
+  }
+
+  .glass-card-hover {
+    @apply glass-card transition-all duration-400;
+  }
+
+  .glass-card-hover:hover {
+    @apply shadow-card-hover border-neon-blue/30;
+    transform: translateY(-2px);
+  }
+
+  .glass-surface {
+    @apply bg-dark-secondary/40 backdrop-blur-md border border-dark-border/30 rounded-xl;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #00D4FF 0%, #9D4EDD 50%, #06FDD8 100%);
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  .gradient-text-static {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #00D4FF 0%, #9D4EDD 100%);
+  }
+
+  .btn-primary {
+    @apply relative overflow-hidden px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-neon-blue via-accent-indigo to-neon-purple shadow-btn transition-all duration-300 ease-out;
+    background-size: 200% 100%;
+  }
+
+  .btn-primary:hover {
+    @apply shadow-btn-hover;
+    background-position: 100% 0;
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0px);
+  }
+
+  .btn-primary:disabled {
+    @apply opacity-40 cursor-not-allowed;
+    transform: none;
+  }
+
+  .btn-ghost {
+    @apply px-4 py-2 rounded-xl font-medium text-surface-300 border border-dark-border/40 bg-dark-tertiary/30 hover:bg-dark-tertiary/60 hover:text-white hover:border-neon-blue/30 transition-all duration-300;
+  }
+
+  .input-field {
+    @apply w-full bg-dark-bg/60 text-white placeholder-surface-400 border border-dark-border/40 rounded-xl px-4 py-3 transition-all duration-300 ease-out focus:outline-none focus:border-neon-blue/50 focus:ring-2 focus:ring-neon-blue/10 focus:shadow-glow;
+  }
+
+  .status-dot {
+    @apply w-2 h-2 rounded-full;
+  }
+
+  .status-dot-active {
+    @apply status-dot bg-neon-cyan;
+    box-shadow: 0 0 8px rgba(6, 253, 216, 0.6);
+  }
+
+  .status-dot-inactive {
+    @apply status-dot bg-red-500/80;
+  }
+
+  .neon-border {
+    @apply border border-neon-blue/20 animate-border-glow;
+  }
+
+  .section-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.15em] text-surface-400;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-dark-border/50 rounded-full;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-neon-blue/30;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(17, 17, 34, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-border/60 rounded-full;
+  border: 1px solid transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-neon-blue/30;
+}
+
+::selection {
+  @apply bg-neon-blue/25 text-white;
+}
+
+:focus-visible {
+  @apply outline-none ring-2 ring-neon-blue/40 ring-offset-2 ring-offset-dark-bg;
+}
+
+@keyframes gradient-shift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}

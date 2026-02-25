@@ -1,0 +1,19 @@
+flask
+flask-cors
+python-dotenv
+requests
+chromadb
+sentence-transformers
+huggingface-hub
+groq
+ollama
+python-multipart
+werkzeug
+
+# Document extraction
+pdfminer.six
+PyPDF2
+python-docx
+python-pptx
+openpyxl
+xlrd
