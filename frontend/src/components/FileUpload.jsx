@@ -39,15 +39,11 @@ export const FileUpload = ({ onFileSelect, isLoading, uploadStatus }) => {
       onDragLeave={handleDrag}
       onDragOver={handleDrag}
       onDrop={handleDrop}
-      className={`relative overflow-hidden rounded-2xl transition-all duration-400 ${isDragActive
-          ? 'border-2 border-neon-blue shadow-neon-blue'
-          : 'border-2 border-dashed border-dark-border/50 hover:border-neon-blue/40'
-        }`}
+      className={`relative overflow-hidden rounded-xl transition-all duration-400`}
       style={{
-        background: isDragActive
-          ? 'linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(157, 78, 221, 0.06) 100%)'
-          : 'linear-gradient(135deg, rgba(19, 19, 43, 0.5) 0%, rgba(17, 17, 34, 0.3) 100%)',
-        backdropFilter: 'blur(16px)',
+        border: `3px dashed ${isDragActive ? '#C6FF00' : '#08080F'}`,
+        background: isDragActive ? '#14142A' : '#0F0F1E',
+        boxShadow: isDragActive ? '4px 4px 0px #C6FF00' : '4px 4px 0px #08080F',
       }}
     >
       <div className="relative z-10 p-8 md:p-10">
@@ -76,25 +72,30 @@ export const FileUpload = ({ onFileSelect, isLoading, uploadStatus }) => {
                 </div>
               </div>
 
-              <p className="text-base font-semibold text-white mb-1">
+              <p className="text-base font-bold text-cream mb-1 font-display">
                 {uploadStatus?.message || 'Processing repository...'}
               </p>
-              <p className="text-xs text-surface-400 mb-5">This may take a moment for large repositories</p>
+              <p className="text-xs text-cream/60 mb-5 font-mono">This may take a moment for large repositories</p>
 
               {uploadStatus?.progress != null && (
                 <div className="max-w-xs mx-auto">
-                  <div className="flex justify-between text-[11px] text-surface-400 mb-1.5 tabular-nums">
-                    <span>Progress</span>
+                  <div className="flex justify-between text-[11px] text-cream/60 mb-1.5 tabular-nums font-mono">
+                    <span>PROGRESS</span>
                     <span>{Math.round(uploadStatus.progress)}%</span>
                   </div>
-                  <div className="w-full bg-dark-bg/60 rounded-full h-1.5 overflow-hidden">
+                  <div className="w-full rounded-lg h-3 overflow-hidden" style={{
+                    background: '#08080F',
+                    border: '2px solid #08080F',
+                    boxShadow: '2px 2px 0px #08080F',
+                  }}>
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${uploadStatus.progress}%` }}
                       transition={{ duration: 0.4, ease: 'easeOut' }}
-                      className="h-full rounded-full"
+                      className="h-full"
                       style={{
-                        background: 'linear-gradient(90deg, #00D4FF 0%, #9D4EDD 50%, #06FDD8 100%)',
+                        background: '#C6FF00',
+                        clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 100%, 8px 100%)',
                       }}
                     />
                   </div>
@@ -114,27 +115,30 @@ export const FileUpload = ({ onFileSelect, isLoading, uploadStatus }) => {
                 transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
                 className="mb-5"
               >
-                <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-neon-blue/10 to-neon-purple/10 border border-neon-blue/20 flex items-center justify-center">
-                  <Upload size={28} className="text-neon-blue" strokeWidth={1.5} />
+                <div className="w-16 h-16 mx-auto rounded-lg font-display bg-lime/10 flex items-center justify-center" style={{
+                  border: '2.5px solid #C6FF00',
+                  boxShadow: '3px 3px 0px #C6FF00',
+                }}>
+                  <Upload size={28} className="text-lime" strokeWidth={2} />
                 </div>
               </motion.div>
 
-              <h3 className="text-xl md:text-2xl font-display font-bold text-white mb-2">
-                Drop your repository
+              <h3 className="text-2xl md:text-4xl font-display font-bold text-cream mb-2 letter-spacing-widest">
+                DROP YOUR REPOSITORY
               </h3>
-              <p className="text-sm text-surface-400 mb-6">
+              <p className="text-sm text-cream/70 mb-6 font-mono">
                 Drag & drop a ZIP file or click to browse
               </p>
 
               <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.96 }}
                 onClick={() => fileInputRef.current?.click()}
-                className="btn-primary inline-flex items-center gap-2.5 px-7 py-3 text-sm"
+                className="btn-primary inline-flex items-center gap-2.5 px-7 py-3.5 text-sm font-bold font-display"
               >
                 <Zap size={16} />
-                Select ZIP File
-                <ArrowRight size={14} className="opacity-60" />
+                SELECT ZIP FILE
+                <ArrowRight size={14} />
               </motion.button>
 
               <input
@@ -145,15 +149,15 @@ export const FileUpload = ({ onFileSelect, isLoading, uploadStatus }) => {
                 className="hidden"
               />
 
-              <div className="flex items-center justify-center gap-4 mt-6 text-[11px] text-surface-500">
+              <div className="flex items-center justify-center gap-4 mt-6 text-[11px] text-cream/50 font-mono tracking-widest">
                 <span className="flex items-center gap-1">
                   <FileArchive size={12} />
-                  ZIP only
+                  ZIP ONLY
                 </span>
-                <span className="w-px h-3 bg-dark-border/40" />
-                <span>Up to 100MB</span>
-                <span className="w-px h-3 bg-dark-border/40" />
-                <span>All languages</span>
+                <span className="w-px h-3 bg-lime/20" />
+                <span>UP TO 100MB</span>
+                <span className="w-px h-3 bg-lime/20" />
+                <span>ALL LANGUAGES</span>
               </div>
             </motion.div>
           )}
@@ -166,12 +170,14 @@ export const FileUpload = ({ onFileSelect, isLoading, uploadStatus }) => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="border-t border-dark-border/30"
+            style={{
+              borderTop: `2.5px solid ${uploadStatus.status === 'success' ? '#C6FF00' : '#FF2E7E'}`,
+            }}
           >
             <div
-              className={`flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium ${uploadStatus.status === 'success'
-                  ? 'text-neon-cyan bg-neon-cyan/5'
-                  : 'text-red-400 bg-red-500/5'
+              className={`flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold font-mono tracking-widest ${uploadStatus.status === 'success'
+                  ? 'text-lime bg-lime/5'
+                  : 'text-hot-pink bg-hot-pink/5'
                 }`}
             >
               {uploadStatus.status === 'success' ? (

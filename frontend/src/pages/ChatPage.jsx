@@ -273,7 +273,7 @@ export const ChatPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-dark-bg text-white font-sans">
+    <div className="min-h-screen bg-void text-cream font-sans">
       <AnimatedBackground />
 
       <Navbar
@@ -313,10 +313,11 @@ export const ChatPage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.1 }}
                   >
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full
-                                    bg-neon-blue/5 border border-neon-blue/15 text-neon-blue text-xs font-medium mb-5">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg font-bold
+                                    bg-lime/10 border-2 border-lime text-lime text-xs font-display tracking-widest mb-5"
+                      style={{ boxShadow: '2px 2px 0px #08080F' }}>
                       <Sparkles size={13} />
-                      AI-Powered Code Analysis
+                      AI-POWERED CODE ANALYSIS
                     </div>
                   </motion.div>
 
@@ -324,18 +325,18 @@ export const ChatPage = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className="text-4xl sm:text-5xl md:text-6xl font-display font-bold mb-4 leading-[1.1] text-balance"
+                    className="text-5xl sm:text-6xl md:text-7xl font-display font-bold mb-4 leading-[1.1] text-balance text-cream"
                   >
-                    Understand your{' '}
-                    <span className="gradient-text">codebase</span>
-                    {' '}instantly
+                    UNDERSTAND YOUR{' '}
+                    <span className="gradient-text">CODEBASE</span>
+                    {' '}INSTANTLY
                   </motion.h2>
 
                   <motion.p
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
-                    className="text-base md:text-lg text-surface-400 max-w-lg mx-auto leading-relaxed"
+                    className="text-base md:text-lg text-cream/60 max-w-lg mx-auto leading-relaxed font-mono"
                   >
                     Upload any repository and get AI-powered insights.
                     Ask questions, explore code, and learn faster.
@@ -362,21 +363,27 @@ export const ChatPage = () => {
                   className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-10 w-full max-w-xl"
                 >
                   {[
-                    { icon: UploadIcon, label: 'Upload ZIP', desc: 'Drop your repository' },
-                    { icon: Brain, label: 'AI Indexes', desc: 'Embeddings created' },
-                    { icon: MessageSquare, label: 'Ask Anything', desc: 'Get instant answers' },
+                    { icon: UploadIcon, label: 'UPLOAD ZIP', desc: 'Drop your repository' },
+                    { icon: Brain, label: 'AI INDEXES', desc: 'Embeddings created' },
+                    { icon: MessageSquare, label: 'ASK ANYTHING', desc: 'Get instant answers' },
                   ].map((step, i) => (
                     <motion.div
                       key={i}
-                      whileHover={{ y: -2, borderColor: 'rgba(0, 212, 255, 0.2)' }}
-                      className="glass-card p-4 text-center group cursor-default"
+                      whileHover={{ y: -2, transform: 'translate(-2px, -2px)' }}
+                      className="cartoon-card p-4 text-center group cursor-default"
+                      style={{
+                        background: '#14142A',
+                        border: '2.5px solid #08080F',
+                        boxShadow: '4px 4px 0px #08080F',
+                      }}
                     >
-                      <div className="w-9 h-9 mx-auto mb-2.5 rounded-xl bg-dark-elevated/80 border border-dark-border/30
-                                      flex items-center justify-center group-hover:border-neon-blue/30 transition-colors duration-300">
-                        <step.icon size={16} className="text-surface-400 group-hover:text-neon-blue transition-colors duration-300" />
+                      <div className="w-9 h-9 mx-auto mb-2.5 rounded-lg bg-lime/10 border-2 border-lime
+                                      flex items-center justify-center group-hover:bg-lime/20 transition-colors duration-300"
+                        style={{ boxShadow: '2px 2px 0px #08080F' }}>
+                        <step.icon size={16} className="text-lime transition-colors duration-300" />
                       </div>
-                      <p className="text-xs font-semibold text-white mb-0.5">{step.label}</p>
-                      <p className="text-[11px] text-surface-500">{step.desc}</p>
+                      <p className="text-xs font-bold text-cream mb-0.5 font-display tracking-widest">{step.label}</p>
+                      <p className="text-[11px] text-cream/50 font-mono">{step.desc}</p>
                     </motion.div>
                   ))}
                 </motion.div>
@@ -403,7 +410,7 @@ export const ChatPage = () => {
                   <div ref={chatEndRef} />
                 </div>
 
-                <div className="py-4 border-t border-dark-border/20">
+                <div className="py-4 border-t border-ink/30">
                   <ChatInput
                     query={query}
                     setQuery={setQuery}
