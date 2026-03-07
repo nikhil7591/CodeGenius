@@ -8,8 +8,7 @@ import { ChatInput } from '../components/ChatInput'
 import { WorkflowModal } from '../components/WorkflowModal'
 import { AnimatedBackground, FloatingParticle } from '../components/Background'
 import { Code2, MessageSquare, Upload as UploadIcon, Sparkles, Zap, Brain } from 'lucide-react'
-
-const API_BASE = '/api'
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api'
 
 export const ChatPage = () => {
   const [currentStep, setCurrentStep] = useState('upload')

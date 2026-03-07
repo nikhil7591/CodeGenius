@@ -4,7 +4,7 @@ import axios from 'axios'
 import { X, Upload, CheckCircle, GitBranch, Database, Zap, AlertCircle, ZoomIn, ZoomOut, RotateCcw, Download } from 'lucide-react'
 import html2canvas from 'html2canvas'
 
-const API_BASE = '/api'
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api'
 
 // ────────────────────────────────────────────────────────────────────────────
 // CUSTOM SCROLLBAR STYLES — Dark Cartoon Futurism Theme
