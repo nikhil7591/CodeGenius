@@ -1307,8 +1307,10 @@ def internal_error(error):
 
 
 if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
     print("Starting CodeGenius Backend...")
     print(f"Upload folder: {UPLOAD_FOLDER}")
     print(f"Vector store: {VECTOR_STORE_PATH}")
     print(f"Max upload size: {MAX_UPLOAD_SIZE // 1000000} MB")
-    app.run(debug=False, host='0.0.0.0', port=5000, use_reloader=False, threaded=True)
+    print(f"Running on port: {port}")
+    app.run(debug=False, host='0.0.0.0', port=port, use_reloader=False, threaded=True)
