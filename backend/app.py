@@ -16,7 +16,12 @@ from vector_store import VectorStore
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+app = Flask(__name__)
+CORS(app, 
+     origins=["https://code-genius-tau.vercel.app", "http://localhost:5173"],
+     methods=["GET", "POST", "OPTIONS"],
+     allow_headers=["Content-Type", "Authorization"]
+)
 
 UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')
 MAX_UPLOAD_SIZE = int(os.getenv('MAX_UPLOAD_SIZE', 100000000))
