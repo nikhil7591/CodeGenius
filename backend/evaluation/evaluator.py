@@ -260,21 +260,6 @@
 #     if os.path.exists(repo_dataset):
 #         with open(repo_dataset, encoding="utf-8") as f:
 #             data = json.load(f)
-#         print(f"\n  [DATASET] ✓ Found datasets/{repo_name}.json ({len(data)} queries)")
-#         return repo_dataset, "repo-specific"
-
-#     # ── Check 2: Auto-generate karo ───────────────────────────────────────
-#     print(f"\n  [DATASET] datasets/{repo_name}.json not found")
-#     print(f"  [DATASET] → Auto-generating from chunks JSON...")
-#     generated = generate_dataset_for_repo(repo_name)
-
-#     if generated and os.path.exists(generated):
-#         with open(generated, encoding="utf-8") as f:
-#             data = json.load(f)
-#         if len(data) > 0:
-#             print(f"  [DATASET] ✓ Auto-generated: {len(data)} queries")
-#             return generated, "auto-generated"
-
 #     # ── Check 3: Fail ─────────────────────────────────────────────────────
 #     print(f"\n  [DATASET] ✗ Could not generate dataset for '{repo_name}'")
 #     print(f"  [DATASET]   Make sure the ZIP is uploaded and processed first!")
@@ -473,12 +458,16 @@ Fixes:
 import os
 import sys
 import json
+from dotenv import load_dotenv
+
 from metrics import precision, recall, mrr, metric_score
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+# Load environment variables (like GROQ_API_KEY) before initializing HyDE
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
+
 from vector_store import VectorStore
-from auto_dataset_generator import generate_dataset_for_repo
 
 
 # ══════════════════════════════════════════════════════════════
@@ -532,10 +521,9 @@ class EvalRAGPipeline:
 
 def get_dataset_path(repo_name: str) -> tuple:
     """
-    Smart dataset selection:
-    1. datasets/<repo_name>.json exist? → use karo
-    2. Nahi? → auto generate
-    3. Fail? → exit with error
+    STRICT DATASET SELECTION:
+    Only uses evaluation/datasets/CodeGenius.json.
+    Auto-generation has been removed.
     """
     eval_dir     = os.path.dirname(__file__)
     datasets_dir = os.path.join(eval_dir, "datasets")
@@ -545,23 +533,12 @@ def get_dataset_path(repo_name: str) -> tuple:
     if os.path.exists(repo_dataset):
         with open(repo_dataset, encoding="utf-8") as f:
             data = json.load(f)
-        print(f"\n  [DATASET] ✓ Found datasets/{repo_name}.json ({len(data)} queries)")
-        return repo_dataset, "repo-specific"
+        print(f"\n  [DATASET] ✓ Found manual dataset: datasets/{repo_name}.json ({len(data)} queries)")
+        return repo_dataset, "manual"
 
-    # Check 2: Auto generate
-    print(f"\n  [DATASET] Not found → Auto-generating...")
-    generated = generate_dataset_for_repo(repo_name)
-
-    if generated and os.path.exists(generated):
-        with open(generated, encoding="utf-8") as f:
-            data = json.load(f)
-        if data:
-            print(f"  [DATASET] ✓ Auto-generated: {len(data)} queries")
-            return generated, "auto-generated"
-
-    # Check 3: Fail
-    print(f"\n  ERROR: Could not find or generate dataset for '{repo_name}'")
-    print(f"  Please upload the ZIP first via /api/upload")
+    # Check 2: Fail directly if purely hardcoded CodeGenius evaluation dataset is missing
+    print(f"\n  ERROR: Could not find strict manual dataset: '{repo_dataset}'")
+    print(f"  Please ensure the handcrafted dataset exists for evaluation.")
     sys.exit(1)
 
 
@@ -626,7 +603,11 @@ def evaluate_retrieval(repo_name: str, dataset_path: str, dataset_type: str):
     count       = len(dataset)
     cat_scores  = {}
 
-    print(f"\n{'═'*60}")
+    # Table Header
+    table_width = 135
+    print(f"\n┌{'─'*133}┐")
+    print(f"│ {'Q#':<4} │ {'Query':<85} │ {'Precision':<9} │ {'Recall':<6} │ {'MRR':<5} │ {'Score':<5} │")
+    print(f"├{'─'*6}┼{'─'*87}┼{'─'*11}┼{'─'*8}┼{'─'*7}┼{'─'*7}┤")
 
     for item in dataset:
         query    = item.get("query", "").strip()
@@ -639,33 +620,43 @@ def evaluate_retrieval(repo_name: str, dataset_path: str, dataset_type: str):
             count   -= 1
             continue
 
-        print(f"\n  Query {item_id} [{category}]")
-        print(f"  Q: {query}")
-        print(f"  Keywords: {keywords}")
-
         # Retrieve
-        result = rag.retrieve(query, n_results=5)
+        result = rag.retrieve(query, n_results=15) # Fetch more to allow filtering
         retrieved_docs = []
         if result.get("status") == "success":
             for res in result.get("results", []):
                 fname = res.get("filename")
-                if fname and fname not in retrieved_docs:
+                if not fname:
+                    continue
+                
+                # FIX: Filter out evaluation logic data leakage
+                normalized_fname = fname.replace("\\", "/")
+                if "evaluation/" in normalized_fname or "datasets/" in normalized_fname or "chunks/" in normalized_fname:
+                    continue
+                    
+                if fname not in retrieved_docs:
                     retrieved_docs.append(fname)
-
-        print(f"  Retrieved: {retrieved_docs}")
+                    
+        # Keep top 5 after filtering
+        retrieved_docs = retrieved_docs[:5]
 
         # Match
         relevant_retrieved = [d for d in retrieved_docs if is_relevant(d, keywords)]
-        print(f"  Matched  : {relevant_retrieved}")
 
-        # Metrics
-        p     = len(relevant_retrieved) / len(retrieved_docs) if retrieved_docs else 0.0
-        r     = 1.0 if relevant_retrieved else 0.0
+        # Metrics based on actual expected relevant files
+        total_relevant = max(len(item.get("matched_files", [])), 1)
+        
+        # Precision@K: normalize by min(retrieved, total_relevant) to not penalize
+        denominator = min(len(retrieved_docs), total_relevant)
+        p     = len(relevant_retrieved) / denominator if denominator > 0 else 0.0
+        r     = len(relevant_retrieved) / total_relevant
         m     = mrr_from_retrieved(retrieved_docs, keywords)
         score = metric_score(p, r)
 
-        print(f"  Precision: {p:.2f} | Recall: {r:.2f} | MRR: {m:.2f} | Metric Score: {score:.2f}")
-        print(f"  {'-'*50}")
+        # Truncate query for table if too long
+        display_query = query if len(query) <= 85 else query[:82] + "..."
+        display_id = f"Q{item_id}"
+        print(f"│ {display_id:<4} │ {display_query:<85} │ {p:<9.2f} │ {r:<6.2f} │ {m:<5.2f} │ {score:<5.2f} │")
 
         total_p     += p
         total_r     += r
@@ -680,6 +671,8 @@ def evaluate_retrieval(repo_name: str, dataset_path: str, dataset_type: str):
         cat_scores[category]["s"]   += score
         cat_scores[category]["n"]   += 1
 
+    print(f"└{'─'*6}┴{'─'*87}┴{'─'*11}┴{'─'*8}┴{'─'*7}┴{'─'*7}┘")
+
     if count == 0:
         print("\n  No valid queries found.")
         return
@@ -690,15 +683,17 @@ def evaluate_retrieval(repo_name: str, dataset_path: str, dataset_type: str):
     avg_score = total_score / count
 
     # ── Final Results ──────────────────────────────────────────
-    print(f"\n{'═'*60}")
-    print(f"  FINAL EVALUATION RESULTS  ({count} queries)")
-    print(f"{'═'*60}")
-    print(f"  Precision    : {avg_p:.3f}   ({avg_p*100:.1f}%)")
-    print(f"  Recall       : {avg_r:.3f}   ({avg_r*100:.1f}%)")
-    print(f"  MRR          : {avg_mrr:.3f}   ({avg_mrr*100:.1f}%)")
-    print(f"  Metric Score : {avg_score:.3f}   ({avg_score*100:.1f}%)")
+    res_width = 54
+    print(f"\n┌{'─' * 52}┐")
+    print(f"│ {f'FINAL EVALUATION RESULTS ({count} queries)':^50} │")
+    print(f"├{'─' * 52}┤")
+    print(f"│ {f'Precision    : {avg_p:.3f} ({avg_p*100:5.1f}%)':<50} │")
+    print(f"│ {f'Recall       : {avg_r:.3f} ({avg_r*100:5.1f}%)':<50} │")
+    print(f"│ {f'MRR          : {avg_mrr:.3f} ({avg_mrr*100:5.1f}%)':<50} │")
+    print(f"│ {f'Metric Score : {avg_score:.3f} ({avg_score*100:5.1f}%)':<50} │")
     if skipped:
-        print(f"  Skipped      : {skipped}")
+        print(f"│ {f'Skipped      : {skipped}':<50} │")
+    print(f"└{'─' * 52}┘")
 
     # Rating
     print(f"\n  RAG Quality:")
@@ -713,14 +708,7 @@ def evaluate_retrieval(repo_name: str, dataset_path: str, dataset_type: str):
     else:
         print(f"  ★☆☆☆☆  VERY POOR  ({avg_score*100:.1f}%)")
 
-    # Category breakdown
-    print(f"\n  Category Breakdown:")
-    print(f"  {'Category':<28} {'Precision':>10} {'Recall':>8} {'MRR':>8} {'Score':>8}")
-    print(f"  {'-'*65}")
-    for cat, s in sorted(cat_scores.items()):
-        n = s["n"]
-        print(f"  {cat:<28} {s['p']/n:>10.2f} {s['r']/n:>8.2f} {s['mrr']/n:>8.2f} {s['s']/n:>8.2f}")
-
+    # Category breakdown (Removed per user request)
     print(f"\n{'═'*60}\n")
 
 
@@ -729,16 +717,9 @@ def evaluate_retrieval(repo_name: str, dataset_path: str, dataset_type: str):
 # ══════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
-    repo_name = "CodeGenius"
+    repo_name = "StudySync"
     if len(sys.argv) > 1:
         repo_name = sys.argv[1]
-
-    # Pehle purani dataset delete karo taaki fresh generate ho
-    datasets_dir = os.path.join(os.path.dirname(__file__), "datasets")
-    old_dataset  = os.path.join(datasets_dir, f"{repo_name}.json")
-    if os.path.exists(old_dataset):
-        os.remove(old_dataset)
-        print(f"  [DATASET] Deleted old dataset for fresh generation")
 
     dataset_path, dataset_type = get_dataset_path(repo_name)
     evaluate_retrieval(repo_name, dataset_path, dataset_type)

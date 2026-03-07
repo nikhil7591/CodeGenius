@@ -1,0 +1,156 @@
+[
+    {
+        "id": 1,
+        "category": "Server / Entry Point",
+        "query": "Which file serves as the main Python entry point or server initialization for this backend API?",
+        "relevant_docs_keywords": [
+            "app.py"
+        ],
+        "matched_files": [
+            "app.py"
+        ]
+    },
+    {
+        "id": 2,
+        "category": "Authentication",
+        "query": "Which module handles JWT token verification, user authentication, and API route guarding?",
+        "relevant_docs_keywords": [
+            "verify.py"
+        ],
+        "matched_files": [
+            "verify.py"
+        ]
+    },
+    {
+        "id": 3,
+        "category": "Embedding / Vector",
+        "query": "Which Python module initializes the sentence transformers and converts raw text documents into vector embeddings?",
+        "relevant_docs_keywords": [
+            "embeddings.py"
+        ],
+        "matched_files": [
+            "embeddings.py"
+        ]
+    },
+    {
+        "id": 4,
+        "category": "Vector Store",
+        "query": "Where is the ChromaDB connection initialized and the persistent vector store configured?",
+        "relevant_docs_keywords": [
+            "vector_store.py"
+        ],
+        "matched_files": [
+            "vector_store.py"
+        ]
+    },
+    {
+        "id": 5,
+        "category": "RAG Pipeline",
+        "query": "Which class orchestrates the complete RAG loop, retrieving context from the vector store and executing the LLM query?",
+        "relevant_docs_keywords": [
+            "rag_pipeline.py"
+        ],
+        "matched_files": [
+            "rag_pipeline.py"
+        ]
+    },
+    {
+        "id": 6,
+        "category": "Chunking",
+        "query": "Where is the parent-child retriever and document chunking logic written for semantic search indexing?",
+        "relevant_docs_keywords": [
+            "parent_child_retriever.py"
+        ],
+        "matched_files": [
+            "parent_child_retriever.py"
+        ]
+    },
+    {
+        "id": 7,
+        "category": "HyDE",
+        "query": "Which AI module implements Hypothetical Document Embeddings (HyDE) to expand search queries using the Groq API?",
+        "relevant_docs_keywords": [
+            "hyde.py"
+        ],
+        "matched_files": [
+            "hyde.py"
+        ]
+    },
+    {
+        "id": 8,
+        "category": "Frontend / Routing",
+        "query": "Which React JSX file manages all frontend routing (like React Router Route paths) and the main application container?",
+        "relevant_docs_keywords": [
+            "App.jsx"
+        ],
+        "matched_files": [
+            "App.jsx"
+        ]
+    },
+    {
+        "id": 9,
+        "category": "UI Navigation",
+        "query": "Which React component renders the top navigation bar with the application logo and links?",
+        "relevant_docs_keywords": [
+            "Navbar.jsx"
+        ],
+        "matched_files": [
+            "Navbar.jsx"
+        ]
+    },
+    {
+        "id": 10,
+        "category": "UI Modals",
+        "query": "Which React component is responsible for rendering the visual workflow modal with Mermaid diagrams?",
+        "relevant_docs_keywords": [
+            "WorkflowModal.jsx"
+        ],
+        "matched_files": [
+            "WorkflowModal.jsx"
+        ]
+    },
+    {
+        "id": 11,
+        "category": "Chat Interface",
+        "query": "Which React page acts as the main container layout orchestrating the entire chat interaction area?",
+        "relevant_docs_keywords": [
+            "ChatPage.jsx"
+        ],
+        "matched_files": [
+            "ChatPage.jsx"
+        ]
+    },
+    {
+        "id": 12,
+        "category": "Chat Elements",
+        "query": "Which React component renders an individual distinct chat message bubble originating from either the user or the assistant?",
+        "relevant_docs_keywords": [
+            "ChatMessage.jsx"
+        ],
+        "matched_files": [
+            "ChatMessage.jsx"
+        ]
+    },
+    {
+        "id": 13,
+        "category": "UI Background",
+        "query": "Which React component is solely responsible for rendering the futuristic glowing animated background visual effects?",
+        "relevant_docs_keywords": [
+            "Background.jsx"
+        ],
+        "matched_files": [
+            "Background.jsx"
+        ]
+    },
+    {
+        "id": 14,
+        "category": "Styling",
+        "query": "Where are the global CSS variables and styling overrides defined for Tailwind CSS in the frontend?",
+        "relevant_docs_keywords": [
+            "index.css"
+        ],
+        "matched_files": [
+            "index.css"
+        ]
+    }
+]

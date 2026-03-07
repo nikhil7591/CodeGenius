@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import axios from 'axios'
-import { X, Upload, CheckCircle, GitBranch, Database, Zap, AlertCircle, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react'
+import { X, Upload, CheckCircle, GitBranch, Database, Zap, AlertCircle, ZoomIn, ZoomOut, RotateCcw, Download } from 'lucide-react'
+import html2canvas from 'html2canvas'
 
 const API_BASE = '/api'
 
@@ -174,15 +175,32 @@ const computeLayout = (nodes, edges) => {
   const LEFT_PADDING = 40
   const TOP_PADDING = 40
 
-  const positions = {}
   const colKeys = Object.keys(columns)
     .map(Number)
     .sort((a, b) => a - b)
 
+  // 1) Find the maximum height among all columns
+  let maxColH = 0
+  const colHeights = {}
+
+  colKeys.forEach(col => {
+    const nodesInCol = columns[col]
+    const h = nodesInCol.length * NODE_H + (nodesInCol.length - 1) * ROW_GAP
+    colHeights[col] = h
+    if (h > maxColH) {
+      maxColH = h
+    }
+  })
+
+  // 2) Position nodes with vertical centering
+  const positions = {}
   colKeys.forEach((col, colIdx) => {
     const nodesInCol = columns[col]
-    const totalColH = nodesInCol.length * NODE_H + (nodesInCol.length - 1) * ROW_GAP
-    const startY = TOP_PADDING
+    const currentColH = colHeights[col]
+
+    // Offset to vertically center this column relative to the tallest column
+    const yOffset = (maxColH - currentColH) / 2
+    const startY = TOP_PADDING + yOffset
 
     nodesInCol.forEach((nodeId, rowIdx) => {
       positions[nodeId] = {
@@ -510,6 +528,29 @@ export const WorkflowModal = ({ repoName, onClose }) => {
   const [manualZoom, setManualZoom] = useState(false)
   const [customZoom, setCustomZoom] = useState(1)
   const [displayZoom, setDisplayZoom] = useState(1)
+  const [isDownloading, setIsDownloading] = useState(false)
+  const chartRef = useRef(null)
+
+  const handleDownload = async () => {
+    if (!chartRef.current) return
+    try {
+      setIsDownloading(true)
+      const canvas = await html2canvas(chartRef.current, {
+        backgroundColor: '#0F0F1E',
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      })
+      const link = document.createElement('a')
+      link.download = `workflow-${repoName}.png`
+      link.href = canvas.toDataURL('image/png')
+      link.click()
+    } catch (err) {
+      console.error('Failed to download chart:', err)
+    } finally {
+      setIsDownloading(false)
+    }
+  }
 
   // Fetch workflow data
   useEffect(() => {
@@ -717,6 +758,28 @@ export const WorkflowModal = ({ repoName, onClose }) => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={handleDownload}
+              disabled={loading || !data || isDownloading}
+              style={{
+                padding: '7px 10px',
+                borderRadius: '8px',
+                marginLeft: '4px',
+                background: '#13132B',
+                border: '2px solid #2A2A55',
+                boxShadow: '3px 3px 0px #08080F',
+                color: isDownloading ? '#64748B' : '#06FDD8',
+                cursor: (loading || !data || isDownloading) ? 'not-allowed' : 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Download size={16} strokeWidth={2.5} />
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={onClose}
               style={{
                 padding: '8px 10px',
@@ -813,6 +876,7 @@ export const WorkflowModal = ({ repoName, onClose }) => {
 
           {data && !loading && (
             <motion.div
+              ref={chartRef}
               style={{
                 position: 'relative',
                 width: canvasW,

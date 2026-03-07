@@ -78,3 +78,25 @@ htmlcov/
 .env.*.local
 .DS_Store
 Thumbs.db
+
+# ---------------------------------------------
+# CodeGenius Custom Rules
+# ---------------------------------------------
+
+# Backend
+backend/chroma_data/
+backend/uploads/
+backend/parent_docs/
+backend/chunks/
+backend/__pycache__/
+backend/.env
+backend/venv/
+backend/evaluation/datasets/*.json
+!backend/evaluation/datasets/CodeGenius.json
+!backend/evaluation/datasets/StudySync.json
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local

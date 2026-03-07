@@ -930,16 +930,7 @@ def upload_repository():
         print(f"[UPLOAD] ✓ Processing complete: {result.get('message', '')}", flush=True)
         current_repo_name = repo_name
 
-        # ── Auto-generate evaluation dataset for this repo ──────────────────
-        # Jab bhi nayi ZIP upload ho, uski evaluation/datasets/<repo_name>.json
-        # automatically ban jaati hai — evaluation ke time kaam aati hai
-        try:
-            sys.path.append(os.path.join(os.path.dirname(__file__), 'evaluation'))
-            from auto_dataset_generator import generate_dataset_for_repo
-            generate_dataset_for_repo(repo_name)
-            print(f"[UPLOAD] ✓ Evaluation dataset generated for: {repo_name}", flush=True)
-        except Exception as ds_err:
-            print(f"[UPLOAD] ⚠ Dataset generation skipped: {ds_err}", flush=True)
+        # ── Auto-generation logic removed manually per user requirements ──────────
 
         try:
             os.remove(filepath)
@@ -1117,25 +1108,25 @@ Real code/content samples from key files:
 Based on the ACTUAL files and code above, return ONLY a valid JSON object (no markdown, no explanation, no ```):
 {{
   "nodes": [
-    {{"id": "n1", "label": "Short Label", "description": "One sentence what this does.", "type": "entry"}},
+    {{"id": "n1", "label": "Short Label", "description": "Deep, highly detailed professional description of this specific step. Explain the exact mechanism or business logic clearly.", "type": "entry"}},
     ...
   ],
   "edges": [
     {{"from": "n1", "to": "n2"}},
+    {{"from": "n1", "to": "n3"}},
     ...
   ]
 }}
 
 Rules:
-- 6 to 9 nodes total, ordered logically from start to finish
+- Generate 8 to 12 nodes total to ensure a comprehensive, deep workflow diagram.
+- MUST INCLUDE BRANCHING / PARALLEL PATHS: Create a tree or flow diagram structure where nodes can split into multiple paths (e.g., n2 -> n3 AND n2 -> n4) representing decision points, background jobs, or parallel modules. DO NOT make a single straight line.
 - Node types (pick exactly from): entry, process, decision, database, api, output
-- First node MUST be type "entry", last node MUST be type "output"
-- All edges must form one connected flow (no orphan nodes)
-- Labels: max 4 words. Descriptions: max 14 words.
+- First node MUST be type "entry". Leaf nodes (end of paths) MUST be type "output" (you can have multiple outputs if paths branch and end).
+- All edges must form a connected Directed Acyclic Graph.
+- Labels: concise, max 4 words. Descriptions: Deeply detailed and professional, 15 to 30 words per node explaining exactly what happens.
 - MUST reflect the actual project — not a generic template. Use real module/feature names from the files.
-- If it is a document/PDF/Office project, describe document processing flow.
-- If it is a web app, describe frontend → backend → DB → response flow.
-- If it is a data science project, describe data → model → output flow.
+- If it is a web app, show UI -> Router -> (Parallel splits: Auth, DB, Third-party APIs) -> Output.
 """
 
     # Try Groq first
@@ -1201,49 +1192,100 @@ Rules:
 
     # Choose flow type based on detected content
     if has_pdf or has_docx or has_excel or has_pptx:
-        # Document processing flow
-        add_node('Document Upload', 'User uploads PDF/Word/Excel/PPT file', 'entry')
-        add_node('File Extraction', 'Text extracted from document contents', 'process')
-        add_node('Text Chunking', 'Content split into indexed segments', 'process')
-        add_node('Embedding Engine', 'Sentence transformer creates embeddings', 'api')
-        add_node('Vector Storage', 'ChromaDB stores document embeddings', 'database')
-        add_node('Query & Retrieval', 'RAG retrieves relevant document sections', 'decision')
-        add_node('AI Answer', 'LLM generates answer from context', 'output')
+        # Document processing flow (Branching)
+        n_entry = add_node('Document Upload', 'User uploads a PDF, Word, Excel, or PPT file into the system via the provided interface.', 'entry')
+        n_extract = add_node('File Extraction', 'The backend robustly parses deeply nested schemas and extracts rich text and metadata from the document contents.', 'process')
+        n_parallel_split = add_node('Data Branching', 'System automatically splits the workflow for parallel embedding generation and direct metadata indexing.', 'decision')
+        n_chunk = add_node('Text Chunking', 'Complex content is intelligently segmented into overlapping, context-aware chunks optimized for high-fidelity retrieval.', 'process')
+        n_meta = add_node('Metadata Indexing', 'Extracted document properties and structural metadata are rapidly indexed for fast keyword-based pre-filtering.', 'database')
+        n_embed = add_node('Embedding Engine', 'A state-of-the-art sentence transformer computes dense mathematical embeddings for each textual segment.', 'api')
+        n_store = add_node('Vector Storage', 'High-dimensional embeddings are securely persisted to a ChromaDB vector database instance for persistent spatial queries.', 'database')
+        n_rag = add_node('RAG Retrieval', 'An advanced Retrieval-Augmented Generation query accurately locates the most mathematically relevant contextual segments.', 'decision')
+        n_ans = add_node('LLM Generation', 'A large language model synthesizes the retrieved context and generates a precise, coherent natural language response.', 'output')
+        
+        # Build branching edges manually since `add_node` defaults to a linear chain
+        edges.clear()
+        edges.extend([
+            {'from': n_entry, 'to': n_extract},
+            {'from': n_extract, 'to': n_parallel_split},
+            {'from': n_parallel_split, 'to': n_chunk},
+            {'from': n_parallel_split, 'to': n_meta},
+            {'from': n_chunk, 'to': n_embed},
+            {'from': n_embed, 'to': n_store},
+            {'from': n_store, 'to': n_rag},
+            {'from': n_meta, 'to': n_rag},
+            {'from': n_rag, 'to': n_ans}
+        ])
+
     elif has_ml and has_py:
-        # ML/Data science flow
-        add_node('Raw Data Input', 'Dataset loaded for processing', 'entry')
-        add_node('Data Processing', 'Cleaning, feature engineering, transforms', 'process')
-        add_node('Model Training', 'ML model trained on processed data', 'process')
-        add_node('Evaluation', 'Model performance measured and tuned', 'decision')
-        add_node('Model Storage', 'Trained model persisted to disk', 'database')
-        add_node('Prediction API', 'Model served via API endpoint', 'api')
-        add_node('Output Results', 'Predictions returned to caller', 'output')
+        # ML/Data science flow (Branching)
+        n_entry = add_node('Raw Data Input', 'Unstructured and structured historical datasets are dynamically loaded into the data processing pipeline.', 'entry')
+        n_clean = add_node('Data Cleaning', 'Data is vigorously scrubbed to remove outliers, impute missing values, and normalize features to unit variance.', 'process')
+        n_split = add_node('Pipeline Fork', 'The scrubbed data branches into model training data and holdout validation sets for rigorous testing.', 'decision')
+        n_train = add_node('Model Training', 'An advanced machine learning algorithm iteratively trains on the processed data to minimize loss functions.', 'process')
+        n_val = add_node('Validation & Tuning', 'Hyperparameters are automatically tuned utilizing cross-validation against the isolated holdout dataset.', 'process')
+        n_eval = add_node('Evaluation Matrix', 'The trained model’s precision, recall, and overall accuracy are computed and rigorously evaluated.', 'decision')
+        n_store = add_node('Model Registry', 'The finalized performing machine learning model weights and parameters are securely persisted to disk.', 'database')
+        n_api = add_node('Prediction API', 'A scalable REST API is exposed to securely serve real-time predictions to authenticated client applications.', 'api')
+        n_out = add_node('Analytics Dashboard', 'Inference predictions and model confidence metrics are graphically visualized for stakeholder analysis.', 'output')
+        
+        edges.clear()
+        edges.extend([
+            {'from': n_entry, 'to': n_clean},
+            {'from': n_clean, 'to': n_split},
+            {'from': n_split, 'to': n_train},
+            {'from': n_split, 'to': n_val},
+            {'from': n_train, 'to': n_eval},
+            {'from': n_val, 'to': n_eval},
+            {'from': n_eval, 'to': n_store},
+            {'from': n_store, 'to': n_api},
+            {'from': n_api, 'to': n_out}
+        ])
+
     elif has_jsx and has_py:
-        # Full-stack web app
-        add_node('User Request', 'Browser sends request via React UI', 'entry')
-        add_node('React Frontend', 'UI components handle interaction', 'process')
-        add_node('REST API', 'Flask/FastAPI routes and validates request', 'api')
-        add_node('Business Logic', 'Core backend processing and computation', 'process')
-        if has_db:
-            add_node('Database', 'Persistent storage layer queried', 'database')
-        add_node('LLM / RAG', 'AI model generates intelligent response', 'decision')
-        add_node('Response Output', 'Structured JSON returned to frontend', 'output')
-    elif has_py:
-        # Python backend / CLI
-        add_node('Input / Trigger', 'Request or event enters the system', 'entry')
-        add_node('API / Router', 'Routes request to correct handler', 'api')
-        add_node('Core Logic', 'Main processing and business rules applied', 'process')
-        if has_db:
-            add_node('Data Store', 'Database queried or updated', 'database')
-        add_node('Result Processing', 'Output formatted and validated', 'decision')
-        add_node('Response', 'Final result returned to caller', 'output')
+        # Full-stack web app (Branching)
+        n_entry = add_node('Client Request', 'The browser executes a React UI component, launching an asynchronous HTTP request to the backend.', 'entry')
+        n_auth = add_node('Auth Middleware', 'The robust API gateway authenticates JWT tokens and validates strict user role permissions.', 'process')
+        n_router = add_node('API Router', 'The routing layer inspects the request payload and orchestrates horizontal parallel execution pipelines.', 'decision')
+        n_db_read = add_node('Database Query', 'An optimized SQL or NoSQL database transaction fetches highly relational persistent state data.', 'database')
+        n_ext_api = add_node('External Integration', 'A parallel outbound HTTP request securely fetches required contextual data from third-party vendor APIs.', 'api')
+        n_logic = add_node('Business Logic', 'The core Python backend aggressively aggregates the database records and external API payloads.', 'process')
+        n_ai = add_node('LLM Engine', 'An advanced artificial intelligence model optionally generates intelligent summaries based on the aggregated payload.', 'decision')
+        n_render = add_node('React Re-render', 'The frontend React virtual DOM flawlessly reconciles the incoming JSON state and paints the UI.', 'output')
+        
+        edges.clear()
+        edges.extend([
+            {'from': n_entry, 'to': n_auth},
+            {'from': n_auth, 'to': n_router},
+            {'from': n_router, 'to': n_db_read},
+            {'from': n_router, 'to': n_ext_api},
+            {'from': n_db_read, 'to': n_logic},
+            {'from': n_ext_api, 'to': n_logic},
+            {'from': n_logic, 'to': n_ai},
+            {'from': n_logic, 'to': n_render},
+            {'from': n_ai, 'to': n_render}
+        ])
+
     else:
         # Generic fallback
-        add_node('Input', 'Data or request enters pipeline', 'entry')
-        add_node('Processing', 'Core transformation applied', 'process')
-        add_node('Logic Layer', 'Decision or routing performed', 'decision')
-        add_node('Storage', 'Data persisted or retrieved', 'database')
-        add_node('Output', 'Result delivered to consumer', 'output')
+        n_in = add_node('System Trigger', 'An external event, cron job, or manual user input acts as the catalyst initiating the workflow pipeline.', 'entry')
+        n_route = add_node('Event Router', 'Incoming data streams are swiftly parsed, validated, and asynchronously routed to the appropriate handlers.', 'decision')
+        n_task1 = add_node('Primary Compute', 'The central application layer crunches incoming payloads using highly complex mathematical or logical transformations.', 'process')
+        n_task2 = add_node('Auxiliary Indexing', 'Simultaneously, secondary metadata and high-level summaries are generated for rapid full-text search.', 'process')
+        n_db = add_node('Data Persistence', 'Both computed results and auxiliary search indices are safely written to the primary distributed database.', 'database')
+        n_out1 = add_node('User Notification', 'A real-time notification mechanism pushes formatted output alerts directly to the connected client.', 'output')
+        n_out2 = add_node('Audit Logging', 'A secure, unalterable transaction log permanently records the system state changes for strict compliance.', 'output')
+
+        edges.clear()
+        edges.extend([
+            {'from': n_in, 'to': n_route},
+            {'from': n_route, 'to': n_task1},
+            {'from': n_route, 'to': n_task2},
+            {'from': n_task1, 'to': n_db},
+            {'from': n_task2, 'to': n_db},
+            {'from': n_db, 'to': n_out1},
+            {'from': n_db, 'to': n_out2}
+        ])
 
     print(f'[WORKFLOW] Heuristic generated {len(nodes)} nodes', flush=True)
     return jsonify({'nodes': nodes, 'edges': edges}), 200
