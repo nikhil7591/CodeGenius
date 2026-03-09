@@ -3,154 +3,126 @@
         "id": 1,
         "category": "Server / Entry Point",
         "query": "Which file serves as the main Python entry point or server initialization for this backend API?",
-        "relevant_docs_keywords": [
-            "app.py"
-        ],
-        "matched_files": [
-            "app.py"
-        ]
+        "relevant_docs_keywords": ["app.py"],
+        "matched_files": ["app.py"],
+        "expected_answer": "The main Python entry point is app.py. It initializes the Flask application, sets up CORS, and defines all API routes including upload, chat, workflow, and health endpoints.",
+        "answer_keywords": ["app.py", "Flask", "entry point", "routes", "API"]
     },
     {
         "id": 2,
         "category": "Authentication",
         "query": "Which module handles JWT token verification, user authentication, and API route guarding?",
-        "relevant_docs_keywords": [
-            "verify.py"
-        ],
-        "matched_files": [
-            "verify.py"
-        ]
+        "relevant_docs_keywords": ["verify.py"],
+        "matched_files": ["verify.py"],
+        "expected_answer": "The verify.py module handles JWT token verification and user authentication for API route guarding.",
+        "answer_keywords": ["verify.py", "JWT", "authentication", "token"]
     },
     {
         "id": 3,
         "category": "Embedding / Vector",
         "query": "Which Python module initializes the sentence transformers and converts raw text documents into vector embeddings?",
-        "relevant_docs_keywords": [
-            "embeddings.py"
-        ],
-        "matched_files": [
-            "embeddings.py"
-        ]
+        "relevant_docs_keywords": ["embeddings.py"],
+        "matched_files": ["embeddings.py"],
+        "expected_answer": "The embeddings.py module contains the EmbeddingEngine class. It loads the BAAI/bge-small-en-v1.5 sentence transformer model and converts text into 384-dimensional vector embeddings using batch processing.",
+        "answer_keywords": ["embeddings.py", "EmbeddingEngine", "BAAI", "sentence transformer", "384", "vector"]
     },
     {
         "id": 4,
         "category": "Vector Store",
         "query": "Where is the ChromaDB connection initialized and the persistent vector store configured?",
-        "relevant_docs_keywords": [
-            "vector_store.py"
-        ],
-        "matched_files": [
-            "vector_store.py"
-        ]
+        "relevant_docs_keywords": ["vector_store.py"],
+        "matched_files": ["vector_store.py"],
+        "expected_answer": "The ChromaDB connection is initialized in vector_store.py inside the VectorStore class. It uses ChromaDB PersistentClient to store embeddings on disk so data survives server restarts.",
+        "answer_keywords": ["vector_store.py", "ChromaDB", "VectorStore", "PersistentClient", "persist"]
     },
     {
         "id": 5,
         "category": "RAG Pipeline",
         "query": "Which class orchestrates the complete RAG loop, retrieving context from the vector store and executing the LLM query?",
-        "relevant_docs_keywords": [
-            "rag_pipeline.py"
-        ],
-        "matched_files": [
-            "rag_pipeline.py"
-        ]
+        "relevant_docs_keywords": ["rag_pipeline.py"],
+        "matched_files": ["rag_pipeline.py"],
+        "expected_answer": "The RAGPipeline class in rag_pipeline.py orchestrates the complete RAG loop. It coordinates JailbreakGuard security check, HyDE query expansion, ParentChildRetriever for context retrieval, and passes context to the LLM for answer generation.",
+        "answer_keywords": ["rag_pipeline.py", "RAGPipeline", "JailbreakGuard", "HyDE", "retrieve", "LLM"]
     },
     {
         "id": 6,
         "category": "Chunking",
         "query": "Where is the parent-child retriever and document chunking logic written for semantic search indexing?",
-        "relevant_docs_keywords": [
-            "parent_child_retriever.py"
-        ],
-        "matched_files": [
-            "parent_child_retriever.py"
-        ]
+        "relevant_docs_keywords": ["parent_child_retriever.py"],
+        "matched_files": ["parent_child_retriever.py"],
+        "expected_answer": "The parent-child retrieval and chunking logic is in rag/parent_child_retriever.py. Files are stored as parents, then split into 800-character child chunks with 100-character overlap. During retrieval, child chunks are searched but the full parent file content is returned.",
+        "answer_keywords": ["parent_child_retriever.py", "ParentChildRetriever", "chunk", "800", "overlap", "parent", "child"]
     },
     {
         "id": 7,
         "category": "HyDE",
         "query": "Which AI module implements Hypothetical Document Embeddings (HyDE) to expand search queries using the Groq API?",
-        "relevant_docs_keywords": [
-            "hyde.py"
-        ],
-        "matched_files": [
-            "hyde.py"
-        ]
+        "relevant_docs_keywords": ["hyde.py"],
+        "matched_files": ["hyde.py"],
+        "expected_answer": "The HyDE class in rag/hyde.py implements Hypothetical Document Embeddings. It takes a user query, generates a hypothetical code snippet answer using Groq API (llama-3.1-8b-instant), then combines the original query with the hypothetical answer for better vector search matching.",
+        "answer_keywords": ["hyde.py", "HyDE", "hypothetical", "Groq", "query expansion", "llama"]
     },
     {
         "id": 8,
         "category": "Frontend / Routing",
-        "query": "Which React JSX file manages all frontend routing (like React Router Route paths) and the main application container?",
-        "relevant_docs_keywords": [
-            "App.jsx"
-        ],
-        "matched_files": [
-            "App.jsx"
-        ]
+        "query": "Which React JSX file manages all frontend routing and the main application container?",
+        "relevant_docs_keywords": ["App.jsx"],
+        "matched_files": ["App.jsx"],
+        "expected_answer": "App.jsx is the main React application container that manages frontend routing using React Router, defining the route paths for different pages of the application.",
+        "answer_keywords": ["App.jsx", "React", "routing", "React Router", "routes", "container"]
     },
     {
         "id": 9,
         "category": "UI Navigation",
         "query": "Which React component renders the top navigation bar with the application logo and links?",
-        "relevant_docs_keywords": [
-            "Navbar.jsx"
-        ],
-        "matched_files": [
-            "Navbar.jsx"
-        ]
+        "relevant_docs_keywords": ["Navbar.jsx"],
+        "matched_files": ["Navbar.jsx"],
+        "expected_answer": "The Navbar.jsx component renders the top navigation bar of the application, including the CodeGenius logo and navigation links.",
+        "answer_keywords": ["Navbar.jsx", "navigation", "navbar", "logo", "links"]
     },
     {
         "id": 10,
         "category": "UI Modals",
         "query": "Which React component is responsible for rendering the visual workflow modal with Mermaid diagrams?",
-        "relevant_docs_keywords": [
-            "WorkflowModal.jsx"
-        ],
-        "matched_files": [
-            "WorkflowModal.jsx"
-        ]
+        "relevant_docs_keywords": ["WorkflowModal.jsx"],
+        "matched_files": ["WorkflowModal.jsx"],
+        "expected_answer": "The WorkflowModal.jsx component renders the workflow modal that displays the AI-generated architecture diagram. It fetches the workflow graph from the backend API and renders nodes and edges as a visual flowchart.",
+        "answer_keywords": ["WorkflowModal.jsx", "workflow", "modal", "diagram", "nodes", "edges", "flowchart"]
     },
     {
         "id": 11,
         "category": "Chat Interface",
         "query": "Which React page acts as the main container layout orchestrating the entire chat interaction area?",
-        "relevant_docs_keywords": [
-            "ChatPage.jsx"
-        ],
-        "matched_files": [
-            "ChatPage.jsx"
-        ]
+        "relevant_docs_keywords": ["ChatPage.jsx"],
+        "matched_files": ["ChatPage.jsx"],
+        "expected_answer": "ChatPage.jsx is the main React page that orchestrates the entire chat interface. It manages the chat state, handles message sending, displays chat history, and coordinates between ChatInput, ChatMessage, FileUpload, and Navbar components.",
+        "answer_keywords": ["ChatPage.jsx", "chat", "page", "container", "messages", "state"]
     },
     {
         "id": 12,
         "category": "Chat Elements",
-        "query": "Which React component renders an individual distinct chat message bubble originating from either the user or the assistant?",
-        "relevant_docs_keywords": [
-            "ChatMessage.jsx"
-        ],
-        "matched_files": [
-            "ChatMessage.jsx"
-        ]
+        "query": "Which React component renders an individual distinct chat message bubble from either the user or the assistant?",
+        "relevant_docs_keywords": ["ChatMessage.jsx"],
+        "matched_files": ["ChatMessage.jsx"],
+        "expected_answer": "The ChatMessage.jsx component renders individual chat message bubbles. It handles both user and assistant messages with different styling, and displays source file references for assistant answers.",
+        "answer_keywords": ["ChatMessage.jsx", "message", "bubble", "user", "assistant", "sources"]
     },
     {
         "id": 13,
         "category": "UI Background",
-        "query": "Which React component is solely responsible for rendering the futuristic glowing animated background visual effects?",
-        "relevant_docs_keywords": [
-            "Background.jsx"
-        ],
-        "matched_files": [
-            "Background.jsx"
-        ]
+        "query": "Which React component is solely responsible for rendering the futuristic animated background visual effects?",
+        "relevant_docs_keywords": ["Background.jsx"],
+        "matched_files": ["Background.jsx"],
+        "expected_answer": "The Background.jsx component is responsible for rendering the animated background visual effects — glowing particles and futuristic visual elements that appear behind the main UI.",
+        "answer_keywords": ["Background.jsx", "background", "animated", "visual effects", "particles"]
     },
     {
         "id": 14,
         "category": "Styling",
         "query": "Where are the global CSS variables and styling overrides defined for Tailwind CSS in the frontend?",
-        "relevant_docs_keywords": [
-            "index.css"
-        ],
-        "matched_files": [
-            "index.css"
-        ]
+        "relevant_docs_keywords": ["index.css"],
+        "matched_files": ["index.css"],
+        "expected_answer": "Global CSS variables and Tailwind CSS styling overrides are defined in frontend/src/styles/index.css. This file contains custom CSS properties and base style configurations used throughout the application.",
+        "answer_keywords": ["index.css", "CSS", "global", "Tailwind", "variables", "styles"]
     }
 ]

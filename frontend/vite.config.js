@@ -19,6 +19,10 @@ export default defineConfig({
             proxyReq.setTimeout(600000)
           })
         }
+      },
+      '/health': {
+        target: 'http://localhost:5000',
+        changeOrigin: true
       }
     }
   },

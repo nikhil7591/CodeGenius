@@ -6,7 +6,6 @@ chromadb
 sentence-transformers
 huggingface-hub
 groq
-ollama
 python-multipart
 werkzeug
 

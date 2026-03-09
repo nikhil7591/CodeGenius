@@ -1,0 +1,424 @@
+{
+  "repo": "CodeGenius",
+  "total_queries": 14,
+  "averages": {
+    "precision": 0.7857,
+    "recall": 0.7857,
+    "mrr": 0.419,
+    "f1": 0.7857,
+    "faithfulness": 0.6099,
+    "hallucination": 0.3901,
+    "correctness": 0.2501,
+    "completeness": 0.5481,
+    "llm_overall": 0.9143,
+    "combined_score": 0.6275
+  },
+  "per_query": [
+    {
+      "id": 1,
+      "query": "Which file serves as the main Python entry point or server initialization for this backend API?",
+      "category": "Server / Entry Point",
+      "retrieved_files": [
+        "app.py",
+        "jailbreak_guard.py",
+        "ChatPage.jsx",
+        "FileUpload.jsx",
+        "verify.py"
+      ],
+      "answer_snippet": "**The main Python entry point or server initialization for this backend API is likely the current file itself, as it initializes the Flask app.**",
+      "precision": 1.0,
+      "recall": 1.0,
+      "mrr": 1.0,
+      "f1": 1.0,
+      "faithfulness": 0.6429,
+      "hallucination": 0.3571,
+      "hallucination_label": "LOW ✅",
+      "correctness": 0.2973,
+      "completeness": 0.6,
+      "llm_scores": {
+        "faithfulness_llm": 1.0,
+        "correctness_llm": 1.0,
+        "completeness_llm": 0.8,
+        "overall_llm": 1.0,
+        "reasoning": "The answer is supported by the context, which shows the initialization of the Flask app, indicating that this file is the main entry point."
+      }
+    },
+    {
+      "id": 2,
+      "query": "Which module handles JWT token verification, user authentication, and API route guarding?",
+      "category": "Authentication",
+      "retrieved_files": [
+        "app.py",
+        "ChatMessage.jsx",
+        "WorkflowModal.jsx",
+        "ChatPage.jsx",
+        "ChatInput.jsx"
+      ],
+      "answer_snippet": "The provided code context does not explicitly handle JWT token verification, user authentication, or API route guarding. However, it does import the `requests` and `Authorization` headers, which could",
+      "precision": 0.0,
+      "recall": 0.0,
+      "mrr": 0.0,
+      "f1": 0.0,
+      "faithfulness": 0.4848,
+      "hallucination": 0.5152,
+      "hallucination_label": "MEDIUM ⚠️",
+      "correctness": 0.1897,
+      "completeness": 0.75,
+      "llm_scores": {
+        "faithfulness_llm": 1.0,
+        "correctness_llm": 1.0,
+        "completeness_llm": 0.8,
+        "overall_llm": 0.8,
+        "reasoning": "The answer accurately reflects the provided code context, correctly identifies the lack of explicit JWT token verification and API route guarding, and suggests a potential solution using a library like flask-jwt-extended."
+      }
+    },
+    {
+      "id": 3,
+      "query": "Which Python module initializes the sentence transformers and converts raw text documents into vector embeddings?",
+      "category": "Embedding / Vector",
+      "retrieved_files": [
+        "app.py",
+        "embeddings.py",
+        "vector_store.py",
+        "ChatPage.jsx",
+        "Background.jsx"
+      ],
+      "answer_snippet": "The Python module that initializes the sentence transformers and converts raw text documents into vector embeddings is not explicitly stated in the provided code context. However, based on the import ",
+      "precision": 1.0,
+      "recall": 1.0,
+      "mrr": 0.5,
+      "f1": 1.0,
+      "faithfulness": 0.5652,
+      "hallucination": 0.4348,
+      "hallucination_label": "MEDIUM ⚠️",
+      "correctness": 0.2,
+      "completeness": 0.3333,
+      "llm_scores": {
+        "faithfulness_llm": 0.8,
+        "correctness_llm": 0.8,
+        "completeness_llm": 0.6,
+        "overall_llm": 0.8,
+        "reasoning": "The answer is supported by the context and is factually correct, but it does not provide a specific module name and lacks details about the vector embedding process."
+      }
+    },
+    {
+      "id": 4,
+      "query": "Where is the ChromaDB connection initialized and the persistent vector store configured?",
+      "category": "Vector Store",
+      "retrieved_files": [
+        "app.py",
+        "vector_store.py",
+        "utils.py",
+        "parent_child_retriever.py",
+        "App.jsx"
+      ],
+      "answer_snippet": "The ChromaDB connection is not explicitly initialized in the provided code. However, the persistent vector store is configured in the following lines:\n\n```python\nVECTOR_STORE_PATH = os.getenv('VECTOR_",
+      "precision": 1.0,
+      "recall": 1.0,
+      "mrr": 0.5,
+      "f1": 1.0,
+      "faithfulness": 0.72,
+      "hallucination": 0.28,
+      "hallucination_label": "LOW ✅",
+      "correctness": 0.2245,
+      "completeness": 0.6,
+      "llm_scores": {
+        "faithfulness_llm": 1.0,
+        "correctness_llm": 1.0,
+        "completeness_llm": 0.8,
+        "overall_llm": 0.8,
+        "reasoning": "The answer accurately identifies the configuration of the persistent vector store but does not fully address the initialization of the ChromaDB connection as it is not present in the provided code."
+      }
+    },
+    {
+      "id": 5,
+      "query": "Which class orchestrates the complete RAG loop, retrieving context from the vector store and executing the LLM query?",
+      "category": "RAG Pipeline",
+      "retrieved_files": [
+        "app.py",
+        "vector_store.py",
+        "evaluator.py",
+        "ChatPage.jsx",
+        "rag_pipeline.py"
+      ],
+      "answer_snippet": "The `RAGPipeline` class orchestrates the complete RAG loop, retrieving context from the vector store and executing the LLM query.",
+      "precision": 1.0,
+      "recall": 1.0,
+      "mrr": 0.2,
+      "f1": 1.0,
+      "faithfulness": 0.8333,
+      "hallucination": 0.1667,
+      "hallucination_label": "LOW ✅",
+      "correctness": 0.3333,
+      "completeness": 0.3333,
+      "llm_scores": {
+        "faithfulness_llm": 1.0,
+        "correctness_llm": 1.0,
+        "completeness_llm": 1.0,
+        "overall_llm": 1.0,
+        "reasoning": "The answer directly corresponds to the provided code context, specifically referencing the RAGPipeline class."
+      }
+    },
+    {
+      "id": 6,
+      "query": "Where is the parent-child retriever and document chunking logic written for semantic search indexing?",
+      "category": "Chunking",
+      "retrieved_files": [
+        "app.py",
+        "rag_pipeline.py",
+        "parent_child_retriever.py",
+        "WorkflowModal.jsx",
+        "evaluator.py"
+      ],
+      "answer_snippet": "The parent-child retriever and document chunking logic for semantic search indexing is written in the `rag_pipeline.py` file, specifically within the `RAGPipeline` class.",
+      "precision": 1.0,
+      "recall": 1.0,
+      "mrr": 0.3333333333333333,
+      "f1": 1.0,
+      "faithfulness": 0.8667,
+      "hallucination": 0.1333,
+      "hallucination_label": "LOW ✅",
+      "correctness": 0.2727,
+      "completeness": 0.4286,
+      "llm_scores": {
+        "faithfulness_llm": 1.0,
+        "correctness_llm": 1.0,
+        "completeness_llm": 0.8,
+        "overall_llm": 1.0,
+        "reasoning": "The answer is supported by the context, which imports RAGPipeline from rag_pipeline, suggesting that this module contains the relevant logic."
+      }
+    },
+    {
+      "id": 7,
+      "query": "Which AI module implements Hypothetical Document Embeddings (HyDE) to expand search queries using the Groq API?",
+      "category": "HyDE",
+      "retrieved_files": [
+        "hyde.py",
+        "app.py",
+        "evaluator.py",
+        "WorkflowModal.jsx",
+        "Navbar.jsx"
+      ],
+      "answer_snippet": "The `HyDE` class implements Hypothetical Document Embeddings (HyDE) to expand search queries using the Groq API.",
+      "precision": 1.0,
+      "recall": 1.0,
+      "mrr": 1.0,
+      "f1": 1.0,
+      "faithfulness": 0.8,
+      "hallucination": 0.2,
+      "hallucination_label": "LOW ✅",
+      "correctness": 0.2821,
+      "completeness": 0.5,
+      "llm_scores": {
+        "faithfulness_llm": 1.0,
+        "correctness_llm": 1.0,
+        "completeness_llm": 0.8,
+        "overall_llm": 1.0,
+        "reasoning": "The answer directly corresponds to the provided context, correctly identifying the HyDE class as the implementer of Hypothetical Document Embeddings using the Groq API."
+      }
+    },
+    {
+      "id": 8,
+      "query": "Which React JSX file manages all frontend routing and the main application container?",
+      "category": "Frontend / Routing",
+      "retrieved_files": [
+        "App.jsx",
+        "main.jsx",
+        "app.py",
+        "ChatPage.jsx",
+        "WorkflowModal.jsx"
+      ],
+      "answer_snippet": "The React JSX file that manages all frontend routing and the main application container is not explicitly shown in the provided context. However, based on the code, it appears that the `App.js` file i",
+      "precision": 1.0,
+      "recall": 1.0,
+      "mrr": 1.0,
+      "f1": 1.0,
+      "faithfulness": 0.56,
+      "hallucination": 0.44,
+      "hallucination_label": "MEDIUM ⚠️",
+      "correctness": 0.25,
+      "completeness": 0.5,
+      "llm_scores": {
+        "faithfulness_llm": 1.0,
+        "correctness_llm": 0.8,
+        "completeness_llm": 0.6,
+        "overall_llm": 0.8,
+        "reasoning": "The answer is mostly correct but lacks information about the routing management file."
+      }
+    },
+    {
+      "id": 9,
+      "query": "Which React component renders the top navigation bar with the application logo and links?",
+      "category": "UI Navigation",
+      "retrieved_files": [
+        "App.jsx",
+        "main.jsx",
+        "ChatMessage.jsx",
+        "ChatPage.jsx",
+        "WorkflowModal.jsx"
+      ],
+      "answer_snippet": "There is no React component in the provided code that renders a top navigation bar with an application logo and links. The code only includes components for a `ChatPage` and a `CodeBlock`, but does no",
+      "precision": 0.0,
+      "recall": 0.0,
+      "mrr": 0.0,
+      "f1": 0.0,
+      "faithfulness": 0.4444,
+      "hallucination": 0.5556,
+      "hallucination_label": "MEDIUM ⚠️",
+      "correctness": 0.2703,
+      "completeness": 0.6,
+      "llm_scores": {
+        "faithfulness_llm": 1.0,
+        "correctness_llm": 1.0,
+        "completeness_llm": 1.0,
+        "overall_llm": 1.0,
+        "reasoning": "The answer accurately reflects the provided code, which does not contain a React component for a top navigation bar."
+      }
+    },
+    {
+      "id": 10,
+      "query": "Which React component is responsible for rendering the visual workflow modal with Mermaid diagrams?",
+      "category": "UI Modals",
+      "retrieved_files": [
+        "ChatMessage.jsx",
+        "FileUpload.jsx",
+        "WorkflowModal.jsx",
+        "ChatPage.jsx",
+        "App.jsx"
+      ],
+      "answer_snippet": "There is no React component in the provided code context that is specifically responsible for rendering a visual workflow modal with Mermaid diagrams. The provided code context only includes a `CodeBl",
+      "precision": 1.0,
+      "recall": 1.0,
+      "mrr": 0.3333333333333333,
+      "f1": 1.0,
+      "faithfulness": 0.5625,
+      "hallucination": 0.4375,
+      "hallucination_label": "MEDIUM ⚠️",
+      "correctness": 0.1591,
+      "completeness": 0.4286,
+      "llm_scores": {
+        "faithfulness_llm": 1.0,
+        "correctness_llm": 1.0,
+        "completeness_llm": 0.8,
+        "overall_llm": 0.8,
+        "reasoning": "The answer accurately reflects the provided code context, which does not contain a React component for rendering a visual workflow modal with Mermaid diagrams."
+      }
+    },
+    {
+      "id": 11,
+      "query": "Which React page acts as the main container layout orchestrating the entire chat interaction area?",
+      "category": "Chat Interface",
+      "retrieved_files": [
+        "App.jsx",
+        "ChatPage.jsx",
+        "app.py",
+        "ChatInput.jsx",
+        "Navbar.jsx"
+      ],
+      "answer_snippet": "The `ChatPage` component acts as the main container layout orchestrating the entire chat interaction area.",
+      "precision": 1.0,
+      "recall": 1.0,
+      "mrr": 0.5,
+      "f1": 1.0,
+      "faithfulness": 0.5455,
+      "hallucination": 0.4545,
+      "hallucination_label": "MEDIUM ⚠️",
+      "correctness": 0.1389,
+      "completeness": 0.5,
+      "llm_scores": {
+        "faithfulness_llm": 1.0,
+        "correctness_llm": 1.0,
+        "completeness_llm": 1.0,
+        "overall_llm": 1.0,
+        "reasoning": "The answer directly corresponds to the provided code context, correctly identifying the ChatPage component as the main container layout."
+      }
+    },
+    {
+      "id": 12,
+      "query": "Which React component renders an individual distinct chat message bubble from either the user or the assistant?",
+      "category": "Chat Elements",
+      "retrieved_files": [
+        "ChatPage.jsx",
+        "App.jsx",
+        "FileUpload.jsx",
+        "ChatMessage.jsx",
+        "ChatInput.jsx"
+      ],
+      "answer_snippet": "The React component that renders an individual distinct chat message bubble from either the user or the assistant is `ChatMessage`.",
+      "precision": 1.0,
+      "recall": 1.0,
+      "mrr": 0.25,
+      "f1": 1.0,
+      "faithfulness": 0.5833,
+      "hallucination": 0.4167,
+      "hallucination_label": "MEDIUM ⚠️",
+      "correctness": 0.2647,
+      "completeness": 0.6667,
+      "llm_scores": {
+        "faithfulness_llm": 1.0,
+        "correctness_llm": 1.0,
+        "completeness_llm": 1.0,
+        "overall_llm": 1.0,
+        "reasoning": "The answer directly references the 'ChatMessage' component imported and used in the provided code context."
+      }
+    },
+    {
+      "id": 13,
+      "query": "Which React component is solely responsible for rendering the futuristic animated background visual effects?",
+      "category": "UI Background",
+      "retrieved_files": [
+        "App.jsx",
+        "ChatPage.jsx",
+        "WorkflowModal.jsx",
+        "Navbar.jsx",
+        "main.jsx"
+      ],
+      "answer_snippet": "The React components responsible for rendering the futuristic animated background visual effects are `AnimatedBackground` and `FloatingParticle`.",
+      "precision": 0.0,
+      "recall": 0.0,
+      "mrr": 0.0,
+      "f1": 0.0,
+      "faithfulness": 0.6364,
+      "hallucination": 0.3636,
+      "hallucination_label": "LOW ✅",
+      "correctness": 0.3846,
+      "completeness": 0.6,
+      "llm_scores": {
+        "faithfulness_llm": 1.0,
+        "correctness_llm": 1.0,
+        "completeness_llm": 0.8,
+        "overall_llm": 1.0,
+        "reasoning": "The answer accurately identifies the React components responsible for rendering the futuristic animated background visual effects, as supported by the imported components in the provided code."
+      }
+    },
+    {
+      "id": 14,
+      "query": "Where are the global CSS variables and styling overrides defined for Tailwind CSS in the frontend?",
+      "category": "Styling",
+      "retrieved_files": [
+        "ChatMessage.jsx",
+        "App.jsx",
+        "WorkflowModal.jsx",
+        "index.css",
+        "FileUpload.jsx"
+      ],
+      "answer_snippet": "The provided code context does not mention or define global CSS variables and styling overrides for Tailwind CSS. The styling is done using inline styles. There is no indication of where or how Tailwi",
+      "precision": 1.0,
+      "recall": 1.0,
+      "mrr": 0.25,
+      "f1": 1.0,
+      "faithfulness": 0.2941,
+      "hallucination": 0.7059,
+      "hallucination_label": "HIGH ❌",
+      "correctness": 0.234,
+      "completeness": 0.8333,
+      "llm_scores": {
+        "faithfulness_llm": 1.0,
+        "correctness_llm": 1.0,
+        "completeness_llm": 0.8,
+        "overall_llm": 0.8,
+        "reasoning": "The answer accurately reflects the provided code context, which lacks any mention of global CSS variables or Tailwind CSS configuration."
+      }
+    }
+  ]
+}

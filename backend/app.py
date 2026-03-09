@@ -18,7 +18,7 @@ load_dotenv()
 app = Flask(__name__)
 app = Flask(__name__)
 CORS(app, 
-     origins=["https://code-genius-tau.vercel.app", "http://localhost:5173"],
+     origins=["http://localhost:5173", "http://localhost:3000"],
      methods=["GET", "POST", "OPTIONS"],
      allow_headers=["Content-Type", "Authorization"]
 )
@@ -192,6 +192,7 @@ def generate_answer(context: str, query: str) -> dict:
 
 
 @app.route('/api/health', methods=['GET'])
+@app.route('/health', methods=['GET'])
 def health_check():
     try:
         groq_available = False
